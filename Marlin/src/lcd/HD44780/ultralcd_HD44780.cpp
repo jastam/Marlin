@@ -80,6 +80,14 @@
     #endif
   );
 
+#elif ENABLED(SR_LCD_3W_NL)
+
+  // NewLiquidCrystal was not working
+  // https://github.com/mikeshub/SailfishLCD
+  // uses the code directly from Sailfish
+
+  LCD_CLASS lcd(SR_STROBE_PIN, SR_DATA_PIN, SR_CLK_PIN);
+
 #elif ENABLED(LCM1602)
 
   LCD_CLASS lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
@@ -528,7 +536,7 @@ FORCE_INLINE void _draw_heater_status(const int8_t heater, const char prefix, co
 
   if (prefix >= 0) lcd_put_wchar(prefix);
 
-  lcd_put_u8str(itostr3(t1 + 0.5));
+  lcd_put_u8str(i16tostr3(t1 + 0.5));
   lcd_put_wchar('/');
 
   #if !HEATER_IDLE_HANDLER
@@ -548,7 +556,7 @@ FORCE_INLINE void _draw_heater_status(const int8_t heater, const char prefix, co
     }
     else
   #endif
-      lcd_put_u8str(itostr3left(t2 + 0.5));
+      lcd_put_u8str(i16tostr3left(t2 + 0.5));
 
   if (prefix >= 0) {
     lcd_put_wchar(LCD_STR_DEGREE[0]);
@@ -578,7 +586,7 @@ FORCE_INLINE void _draw_bed_status(const bool blink) {
       #endif
     ));
     if (progress)
-      lcd_put_u8str(itostr3(progress));
+      lcd_put_u8str(ui8tostr3(progress));
     else
       lcd_put_u8str_P(PSTR("---"));
     lcd_put_wchar('%');
@@ -627,7 +635,7 @@ void MarlinUI::draw_status_message(const bool blink) {
       lcd_put_u8str_P(PSTR("Dia "));
       lcd_put_u8str(ftostr12ns(filament_width_meas));
       lcd_put_u8str_P(PSTR(" V"));
-      lcd_put_u8str(itostr3(100.0 * (
+      lcd_put_u8str(i16tostr3(100.0 * (
           parser.volumetric_enabled
             ? planner.volumetric_area_nominal / planner.volumetric_multiplier[FILAMENT_SENSOR_EXTRUDER_NUM]
             : planner.volumetric_multiplier[FILAMENT_SENSOR_EXTRUDER_NUM]
@@ -733,7 +741,7 @@ void MarlinUI::draw_status_message(const bool blink) {
  *         |F---%  SD---% T--:--|
  *         |01234567890123456789|
  *
- *  LCD_INFO_SCREEN_STYLE 1 : Prusa-style Status Screen
+ *  LCD_INFO_SCREEN_STYLE 1 : Průša-style Status Screen
  *
  *  |T000/000°  Z 000.00 |
  *  |B000/000°  F---%    |
@@ -849,7 +857,7 @@ void MarlinUI::draw_status_screen() {
 
       lcd_moveto(0, 2);
       lcd_put_wchar(LCD_STR_FEEDRATE[0]);
-      lcd_put_u8str(itostr3(feedrate_percentage));
+      lcd_put_u8str(i16tostr3(feedrate_percentage));
       lcd_put_wchar('%');
 
       char buffer[14];
@@ -883,7 +891,7 @@ void MarlinUI::draw_status_screen() {
               per = planner.flow_percentage[0];
             }
           lcd_put_wchar(c);
-          lcd_put_u8str(itostr3(per));
+          lcd_put_u8str(i16tostr3(per));
           lcd_put_wchar('%');
         #endif
       #endif
@@ -924,7 +932,7 @@ void MarlinUI::draw_status_screen() {
 
     lcd_moveto(LCD_WIDTH - 9, 1);
     lcd_put_wchar(LCD_STR_FEEDRATE[0]);
-    lcd_put_u8str(itostr3(feedrate_percentage));
+    lcd_put_u8str(i16tostr3(feedrate_percentage));
     lcd_put_wchar('%');
 
     // ========== Line 3 ==========
@@ -1378,9 +1386,9 @@ void MarlinUI::draw_status_screen() {
        */
       lcd_moveto(_LCD_W_POS, 0);
       lcd_put_wchar('(');
-      lcd_put_u8str(itostr3(x));
+      lcd_put_u8str(ui8tostr3(x));
       lcd_put_wchar(',');
-      lcd_put_u8str(itostr3(inverted_y));
+      lcd_put_u8str(ui8tostr3(inverted_y));
       lcd_put_wchar(')');
 
       #if LCD_HEIGHT <= 3   // 16x2 or 20x2 display
