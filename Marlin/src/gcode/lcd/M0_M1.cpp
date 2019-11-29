@@ -80,7 +80,10 @@ void GcodeSuite::M0_M1() {
 
   #elif ENABLED(EXTENSIBLE_UI)
 
-    ExtUI::onUserConfirmRequired(has_message ? args : MSG_USERWAIT); // SRAM string
+    if (has_message)
+      ExtUI::onUserConfirmRequired(args); // Can this take an SRAM string??
+    else
+      ExtUI::onUserConfirmRequired_P(GET_TEXT(MSG_USERWAIT));
 
   #else
 
@@ -104,10 +107,6 @@ void GcodeSuite::M0_M1() {
   }
   else
     while (wait_for_user) idle();
-
-  #if ENABLED(EXTENSIBLE_UI)
-    ExtUI::onUserConfirmRequired(nullptr);
-  #endif
 
   #if HAS_LEDS_OFF_FLAG
     printerEventLEDs.onResumeAfterWait();
