@@ -137,8 +137,8 @@
  * THERMAL_PROTECTION_HYSTERESIS and/or THERMAL_PROTECTION_PERIOD
  */
 #if ENABLED(THERMAL_PROTECTION_HOTENDS)
-  #define THERMAL_PROTECTION_PERIOD 40        // Seconds
-  #define THERMAL_PROTECTION_HYSTERESIS 4     // Degrees Celsius
+  #define THERMAL_PROTECTION_PERIOD 60        // Seconds
+  #define THERMAL_PROTECTION_HYSTERESIS 10    // Degrees Celsius
 
   //#define ADAPTIVE_FAN_SLOWING              // Slow part cooling fan if temperature drops
   #if BOTH(ADAPTIVE_FAN_SLOWING, PIDTEMP)
@@ -165,13 +165,13 @@
  * Thermal Protection parameters for the bed are just as above for hotends.
  */
 #if ENABLED(THERMAL_PROTECTION_BED)
-  #define THERMAL_PROTECTION_BED_PERIOD 20    // Seconds
-  #define THERMAL_PROTECTION_BED_HYSTERESIS 2 // Degrees Celsius
+  #define THERMAL_PROTECTION_BED_PERIOD 60    // Seconds
+  #define THERMAL_PROTECTION_BED_HYSTERESIS 5 // Degrees Celsius
 
   /**
    * As described above, except for the bed (M140/M190/M303).
    */
-  #define WATCH_BED_TEMP_PERIOD 60                // Seconds
+  #define WATCH_BED_TEMP_PERIOD 180               // Seconds
   #define WATCH_BED_TEMP_INCREASE 2               // Degrees Celsius
 #endif
 
@@ -338,7 +338,7 @@
 // When first starting the main fan, run it at full speed for the
 // given number of milliseconds.  This gets the fan spinning reliably
 // before setting a PWM value. (Does not work with software PWM for fan on Sanguinololu)
-//#define FAN_KICKSTART_TIME 100
+#define FAN_KICKSTART_TIME 100
 
 // Some coolers may require a non-zero "off" state.
 //#define FAN_OFF_PWM  1
@@ -493,11 +493,11 @@
   #endif
 #endif
 
-//#define Z_DUAL_STEPPER_DRIVERS
+#define Z_DUAL_STEPPER_DRIVERS
 #if ENABLED(Z_DUAL_STEPPER_DRIVERS)
   //#define Z_DUAL_ENDSTOPS
   #if ENABLED(Z_DUAL_ENDSTOPS)
-    #define Z2_USE_ENDSTOP _XMAX_
+    #define Z2_USE_ENDSTOP _ZMAX_
     #define Z_DUAL_ENDSTOPS_ADJUSTMENT  0
   #endif
 #endif
@@ -653,10 +653,11 @@
  * Z Steppers Auto-Alignment
  * Add the G34 command to align multiple Z steppers using a bed probe.
  */
-//#define Z_STEPPER_AUTO_ALIGN
+#define Z_STEPPER_AUTO_ALIGN
 #if ENABLED(Z_STEPPER_AUTO_ALIGN)
   // Define probe X and Y positions for Z1, Z2 [, Z3]
-  #define Z_STEPPER_ALIGN_XY { {  10, 290 }, { 150,  10 }, { 290, 290 } }
+  //#define Z_STEPPER_ALIGN_XY { {  10, 190 }, { 110,  10 }, { 190, 190 } }
+  #define Z_STEPPER_ALIGN_XY { {  10, 190 }, { 110,  10 } }
 
   // Provide Z stepper positions for more rapid convergence in bed alignment.
   // Currently requires triple stepper drivers.
@@ -950,7 +951,7 @@
 //#define LCD_DECIMAL_SMALL_XY
 
 // The timeout (in ms) to return to the status screen from sub-menus
-//#define LCD_TIMEOUT_TO_STATUS 15000
+#define LCD_TIMEOUT_TO_STATUS 3600000
 
 // Add an 'M73' G-code to set the current percentage
 //#define LCD_SET_PROGRESS_MANUALLY
@@ -1880,100 +1881,100 @@
   #define INTERPOLATE       true  // Interpolate X/Y/Z_MICROSTEPS to 256
 
   #if AXIS_IS_TMC(X)
-    #define X_CURRENT       800        // (mA) RMS current. Multiply by 1.414 for peak current.
+    #define X_CURRENT       400        // (mA) RMS current. Multiply by 1.414 for peak current.
     #define X_CURRENT_HOME  X_CURRENT  // (mA) RMS current for sensorless homing
     #define X_MICROSTEPS     16    // 0..256
-    #define X_RSENSE          0.11
+    #define X_RSENSE          0.11f
     #define X_CHAIN_POS      -1    // <=0 : Not chained. 1 : MCU MOSI connected. 2 : Next in chain, ...
   #endif
 
   #if AXIS_IS_TMC(X2)
-    #define X2_CURRENT      800
+    #define X2_CURRENT      400
     #define X2_CURRENT_HOME X2_CURRENT
     #define X2_MICROSTEPS    16
-    #define X2_RSENSE         0.11
+    #define X2_RSENSE         0.11f
     #define X2_CHAIN_POS     -1
   #endif
 
   #if AXIS_IS_TMC(Y)
-    #define Y_CURRENT       800
+    #define Y_CURRENT       400
     #define Y_CURRENT_HOME  Y_CURRENT
     #define Y_MICROSTEPS     16
-    #define Y_RSENSE          0.11
+    #define Y_RSENSE          0.11f
     #define Y_CHAIN_POS      -1
   #endif
 
   #if AXIS_IS_TMC(Y2)
-    #define Y2_CURRENT      800
+    #define Y2_CURRENT      400
     #define Y2_CURRENT_HOME Y2_CURRENT
     #define Y2_MICROSTEPS    16
-    #define Y2_RSENSE         0.11
+    #define Y2_RSENSE         0.11f
     #define Y2_CHAIN_POS     -1
   #endif
 
   #if AXIS_IS_TMC(Z)
-    #define Z_CURRENT       800
+    #define Z_CURRENT       400
     #define Z_CURRENT_HOME  Z_CURRENT
     #define Z_MICROSTEPS     16
-    #define Z_RSENSE          0.11
+    #define Z_RSENSE          0.11f
     #define Z_CHAIN_POS      -1
   #endif
 
   #if AXIS_IS_TMC(Z2)
-    #define Z2_CURRENT      800
+    #define Z2_CURRENT      400
     #define Z2_CURRENT_HOME Z2_CURRENT
     #define Z2_MICROSTEPS    16
-    #define Z2_RSENSE         0.11
+    #define Z2_RSENSE         0.11f
     #define Z2_CHAIN_POS     -1
   #endif
 
   #if AXIS_IS_TMC(Z3)
-    #define Z3_CURRENT      800
+    #define Z3_CURRENT      400
     #define Z3_CURRENT_HOME Z3_CURRENT
     #define Z3_MICROSTEPS    16
-    #define Z3_RSENSE         0.11
+    #define Z3_RSENSE         0.11f
     #define Z3_CHAIN_POS     -1
   #endif
 
   #if AXIS_IS_TMC(E0)
-    #define E0_CURRENT      800
+    #define E0_CURRENT      400
     #define E0_MICROSTEPS    16
-    #define E0_RSENSE         0.11
+    #define E0_RSENSE         0.11f
     #define E0_CHAIN_POS     -1
   #endif
 
   #if AXIS_IS_TMC(E1)
-    #define E1_CURRENT      800
+    #define E1_CURRENT      400
     #define E1_MICROSTEPS    16
-    #define E1_RSENSE         0.11
+    #define E1_RSENSE         0.11f
     #define E1_CHAIN_POS     -1
   #endif
 
   #if AXIS_IS_TMC(E2)
-    #define E2_CURRENT      800
+    #define E2_CURRENT      400
     #define E2_MICROSTEPS    16
-    #define E2_RSENSE         0.11
+    #define E2_RSENSE         0.11f
     #define E2_CHAIN_POS     -1
   #endif
 
   #if AXIS_IS_TMC(E3)
-    #define E3_CURRENT      800
+    #define E3_CURRENT      400
     #define E3_MICROSTEPS    16
-    #define E3_RSENSE         0.11
+    #define E3_RSENSE         0.11f
     #define E3_CHAIN_POS     -1
   #endif
 
   #if AXIS_IS_TMC(E4)
-    #define E4_CURRENT      800
+    #define E4_CURRENT      400
     #define E4_MICROSTEPS    16
-    #define E4_RSENSE         0.11
+    #define E4_RSENSE         0.11f
     #define E4_CHAIN_POS     -1
   #endif
 
   #if AXIS_IS_TMC(E5)
-    #define E5_CURRENT      800
+    #define E5_CURRENT      400
     #define E5_MICROSTEPS    16
-    #define E5_RSENSE         0.11
+    #define E5_RSENSE         0.11f
     #define E5_CHAIN_POS     -1
   #endif
 
@@ -2000,7 +2001,7 @@
    * The default SW SPI pins are defined the respective pins files,
    * but you can override or define them here.
    */
-  //#define TMC_USE_SW_SPI
+  #define TMC_USE_SW_SPI
   //#define TMC_SW_MOSI       -1
   //#define TMC_SW_MISO       -1
   //#define TMC_SW_SCK        -1
@@ -2062,7 +2063,7 @@
    * Define you own with
    * { <off_time[1..15]>, <hysteresis_end[-3..12]>, hysteresis_start[1..8] }
    */
-  #define CHOPPER_TIMING CHOPPER_DEFAULT_12V
+  #define CHOPPER_TIMING CHOPPER_DEFAULT_24V
 
   /**
    * Monitor Trinamic drivers for error conditions,
@@ -2075,7 +2076,7 @@
    * M912 - Clear stepper driver overtemperature pre-warn condition flag.
    * M122 - Report driver parameters (Requires TMC_DEBUG)
    */
-  //#define MONITOR_DRIVER_STATUS
+  #define MONITOR_DRIVER_STATUS
 
   #if ENABLED(MONITOR_DRIVER_STATUS)
     #define CURRENT_STEP_DOWN     50  // [mA]
@@ -2131,7 +2132,7 @@
    *
    * TMC2209 requires STEALTHCHOP enabled for SENSORLESS_HOMING
    */
-  //#define SENSORLESS_HOMING // StallGuard capable drivers only
+  #define SENSORLESS_HOMING // StallGuard capable drivers only
 
   /**
    * Use StallGuard2 to probe the bed with the nozzle.
@@ -2162,7 +2163,7 @@
    * Enable M122 debugging command for TMC stepper drivers.
    * M122 S0/1 will enable continous reporting.
    */
-  //#define TMC_DEBUG
+  #define TMC_DEBUG
 
   /**
    * You can set your own advanced settings by filling in predefined functions.
